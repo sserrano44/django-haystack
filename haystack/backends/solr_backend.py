@@ -462,8 +462,8 @@ class SearchQuery(BaseSearchQuery):
             kwargs['spelling_query'] = spelling_query
             
         if self.spatial_query:
-            spatial = ' '.join([ '%s=%s' % (k,v) for k,v in self.spatial_query.items()])
-            final_query = '{!spatial %s}%s' % (spatial, final_query)
+            spatial = '%s,%s,%s' % (self.spatial_query['lat'], self.spatial_query['long'], self.spatial_query['radius'])
+            final_query = '{!spatial circles=%s}%s' % (spatial, final_query)
         
         results = self.backend.search(final_query, **kwargs)
         self._results = results.get('results', [])
